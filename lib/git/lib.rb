@@ -80,7 +80,9 @@ module Git
     
       arr_opts << '--pretty=raw'
       arr_opts << "--skip=#{opts[:skip]}" if opts[:skip]
-   
+      arr_opts << "--no-merges" if opts[:no_merges]
+      arr_opts << "--first-parent" if opts[:first_parent]
+
       arr_opts += log_path_options(opts)
       
       full_log = command_lines('log', arr_opts, true)

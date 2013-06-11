@@ -18,6 +18,8 @@ module Git
       @skip = nil
       @until = nil
       @between = nil
+      @first_parent = false
+      @no_merges = false
     end
 
     def object(objectish)
@@ -59,6 +61,18 @@ module Git
     def until(date)
       dirty_log
       @until = date
+      return self
+    end
+
+    def first_parent
+      dirty_log
+      @first_parent = true
+      return self
+    end
+
+    def no_merges
+      dirty_log
+      @no_merges = true
       return self
     end
     
@@ -113,7 +127,8 @@ module Git
         log = @base.lib.full_log_commits(:count => @count, :object => @object, 
                                     :path_limiter => @path, :since => @since, 
                                     :author => @author, :grep => @grep, :skip => @skip,
-                                    :until => @until, :between => @between)
+                                    :until => @until, :between => @between, :no_merges => @no_merges, :first_parent => @first_parent)
+
         @commits = log.map { |c| Git::Object::Commit.new(@base, c['sha'], c) }
       end
       
